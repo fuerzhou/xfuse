@@ -61,7 +61,7 @@ def run(
     if slide_options is None:
         slide_options = {}
 
-    if (available_cores := len(os.sched_getaffinity(0))) < num_data_workers:
+    if (available_cores := multiprocessing.cpu_count())) < num_data_workers:
         warnings.warn(
             " ".join(
                 [
@@ -110,6 +110,7 @@ def run(
         filtered_genes = set(
             g for g, x in zip(dataset.genes, summed_counts) if x < min_counts
         )
+        
         filtered_genes = filtered_genes | set(
             g for g in dataset.genes if not re.match(gene_regex, g)
         )
